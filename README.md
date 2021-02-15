@@ -1,7 +1,8 @@
-[![Build Status](https://travis-ci.com/kazi-rys-21/slack-demo.svg?branch=master)](https://travis-ci.com/kazi-rys-21/slack-demo)
+[![Build Status](https://travis-ci.com/Squishy123/cps847-assignment-1.svg?branch=main)](https://travis-ci.com/Squishy123/cps847-assignment-1)
 
 ## Getting Started
+
 ```
-pip install -r requirements.text
+pip install -r requirements.txt
 cp .env.example .env
 ```

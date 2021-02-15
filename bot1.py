@@ -20,10 +20,11 @@ slack_event_adapter = SlackEventAdapter(os.environ['SIGNING_SECRET'],'/slack/eve
 client = slack.WebClient(token=os.environ['SLACK_TOKEN'])
 
 # connect the bot to the channel in Slack Channel
-client.chat_postMessage(channel='#bot-dev', text='Message from Taimoor bot (startup)')
+client.chat_postMessage(channel='#bot-dev', text='Message from bot (on startup)')
 
 # Get Bot ID
 BOT_ID = client.api_call("auth.test")['user_id']
+print("bot is running as user_id:", BOT_ID)
 
 @app.route('/')
 def hello():
@@ -34,13 +35,13 @@ def hello():
 # handling Message Events
 @slack_event_adapter.on('message')
 def message(payload):
-    print("message recv")
-    print(payload)
+    print("bot read message:", payload)
     event = payload.get('event',{})
     channel_id = event.get('channel')
     user_id = event.get('user')
     text2 = event.get('text')
-    if BOT_ID !=user_id:
+    if BOT_ID != user_id:
+        print("bot echoing message from:", user_id)
         client.chat_postMessage(channel=channel_id, text=text2)
 
 # Run the webserver micro-service

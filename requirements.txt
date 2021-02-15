@@ -3,3 +3,4 @@ requests
 slack
 python-dotenv
 slackeventsapi
+slackclient

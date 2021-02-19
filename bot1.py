@@ -25,7 +25,7 @@ client = slack.WebClient(token=os.environ['SLACK_TOKEN'])
 
 # connect the bot to the channel in Slack Channel
 print("sending hello world message...")
-client.chat_postMessage(channel='#bot-dev', text='Message from bot (on startup)')
+client.chat_postMessage(channel='#bot-chat', text='Message from bot (on startup)')
 
 # Get Bot ID
 BOT_ID = client.api_call("auth.test")['user_id']

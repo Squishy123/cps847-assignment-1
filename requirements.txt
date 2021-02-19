@@ -4,3 +4,4 @@ slack
 python-dotenv
 slackeventsapi
 slackclient
+pyowm

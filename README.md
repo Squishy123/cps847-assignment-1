@@ -7,6 +7,8 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
+Then setup your environment variables.
+
 ## Setup NGROK
 ```
 ngrok http http://127.0.0.1:5000 80

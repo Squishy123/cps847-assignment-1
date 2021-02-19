@@ -16,6 +16,7 @@ env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 # Configure your flask application
 app = Flask(__name__)
+app.run(host='0.0.0.0' , port=80)
 
 # Configure SlackEventAdapter to handle events
 slack_event_adapter = SlackEventAdapter(os.environ['SIGNING_SECRET'],'/slack/events',app)

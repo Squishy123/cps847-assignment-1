@@ -1,1 +1,1 @@
-web: python3 bot1.py
+web: gunicorn --bind 0.0.0.0 bot1:app

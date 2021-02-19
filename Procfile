@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:5000 bot1:app
+web: gunicorn bot1:app

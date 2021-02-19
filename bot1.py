@@ -10,6 +10,7 @@ from slackeventsapi import SlackEventAdapter
 from pyowm import OWM
 from pyowm.utils import config
 from pyowm.utils import timestamps
+from autocorrect import Speller
 
 # Load the Token from .env file
 env_path = Path('.') / '.env'
@@ -35,6 +36,9 @@ print("bot is running as user_id:", BOT_ID)
 owm = OWM(os.environ["OPEN_WEATHER_MAP"])
 mgr = owm.weather_manager()
 
+# Setup spellcheck 
+spell = Speller()
+
 @app.route('/')
 def hello():
     return 'up'
@@ -52,25 +56,37 @@ def message(payload):
         
 
     if BOT_ID != user_id:
-        # "weather toronto" -> Gets weather for toronto
-        # "weather toronto,canada" -> Same as above
-        # "weather toronto,usa" -> Gets weather for toronto (in USA)
-        # "weather toronto,ohio,usa" -> Same as above
         text2split = text2.split(" ")
         if text2split[0] == "weather":
+            # "weather toronto" -> Gets weather for toronto
+            # "weather toronto,canada" -> Same as above
+            # "weather toronto,usa" -> Gets weather for toronto (in USA)
+            # "weather toronto,ohio,usa" -> Same as above
+            # Run autocorrect after the word "weather"
+            locations = text2split[1:]
             place = " ".join(text2split[1:])
-            print("getting weather for place:", place)
+            place2 = spell(place)
+            autocorrected = False
+            if place != place2:
+                print("autocorrected {} to {}".format(place, place2))
+                autocorrected = True
+
+            # Fetch weather data
+            print("getting weather for place:", place if not autocorrected else place2)
             try:
                 print("got weather data...") 
-                observation = mgr.weather_at_place(place)
+                observation = mgr.weather_at_place(place if not autocorrected else place2)
                 weather = observation.weather
                 temp = weather.temperature("celsius") # {'temp_max': 10.5, 'temp': 9.7, 'temp_min': 9.0}
                 client.chat_postMessage(channel=channel_id, text=str(temp))
+                if autocorrected:
+                    client.chat_postMessage(channel=channel_id, text="FYI, it's spelled '{}'".format(place2))
             except: 
                 print("failed to get weather data!")
-                client.chat_postMessage(channel=channel_id, text="Could not find weather for location: {}".format(place))
+                client.chat_postMessage(channel=channel_id, text="Could not find weather for location: {} ({})".format(place, place2))
                 client.chat_postMessage(channel=channel_id, text="Usage: weather <city>,<region>,<country> (no spaces, region and country are optional)")
         else:
+            # Echo whatever someone said
             print("bot echoing message from:", user_id)
             client.chat_postMessage(channel=channel_id, text=text2)
 

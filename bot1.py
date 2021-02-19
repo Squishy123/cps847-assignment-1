@@ -8,8 +8,6 @@ from flask import Flask
 from slackeventsapi import SlackEventAdapter
 # Open weather map
 from pyowm import OWM
-from pyowm.utils import config
-from pyowm.utils import timestamps
 
 # Load the Token from .env file
 env_path = Path('.') / '.env'

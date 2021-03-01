@@ -6,3 +6,4 @@ slackeventsapi
 slackclient
 pyowm
 gunicorn
+autocorrect
